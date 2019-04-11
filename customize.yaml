@@ -1,0 +1,35 @@
+sensor.schlage_be469_touchscreen_deadbolt_alarm_type_6:
+    hidden: true 
+
+sensor.schlage_be469_touchscreen_deadbolt_alarm_level_6:
+    hidden: true
+
+sensor.schlage_be469_touchscreen_deadbolt_sourcenodeid:
+    hidden: true
+
+sensor.schlage_be469_touchscreen_deadbolt_access_control:
+    hidden: true
+    
+sensor.schlage_be469_touchscreen_deadbolt_burglar:
+    hidden: true
+    
+sensor.schlage_be469_touchscreen_deadbolt_power_management:
+    hidden: true
+    
+sensor.schlage_be469_touchscreen_deadbolt_system:
+    hidden: true
+    
+sensor.zooz_unknown_type_0001_id_0005_alarm_type_2:
+    hidden: true
+    
+sensor.zooz_unknown_type_0001_id_0005_alarm_level:
+    hidden: true
+    
+sensor.zooz_unknown_type_0001_id_0005_sourcenodeid_2:
+    hidden: true
+    
+sensor.zooz_unknown_type_0001_id_0005_burglar_2:
+    hidden: true
+    
+sensor.zooz_unknown_type_0001_id_0005_power_management_2:
+    hidden: true

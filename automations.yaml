@@ -1,0 +1,241 @@
+- id: '1546298772246'
+  alias: Front Door - Lock at 10 pm
+  trigger:
+  - at: '22:00:00'
+    platform: time
+  condition:
+  - condition: state
+    entity_id: device_tracker.christians_iphonex
+    state: home
+  - condition: state
+    entity_id: device_tracker.mirandas_iphone
+    state: home
+  action:
+  - service: lock.lock
+- id: '1547302551805'
+  alias: Turn Off Media Players If No Activity
+  trigger:
+  - entity_id: binary_sensor.living_room_occupancy
+    for: 00:00:30
+    platform: state
+    to: 'off'
+  - entity_id: binary_sensor.my_ecobee_occupancy
+    for: 00:00:30
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data:
+      entity_id: media_player.denon_avr_x3100w
+    service: media_player.turn_off
+  - data:
+      entity_id: media_player.christianmiranda_roku
+    service: media_player.turn_off
+- id: '1547305827586'
+  alias: Front Door - Unlocked Message
+  trigger:
+  - entity_id: lock.schlage_be469_touchscreen_deadbolt_locked_2
+    for: 00:05:00
+    platform: state
+    to: unlocked
+  condition:
+  - condition: state
+    entity_id: binary_sensor.front_door_sensor
+    state: open
+  action:
+  - data:
+      message: The front door is unlocked
+    service: notify.pushbullet
+- id: '1547306988129'
+  alias: Front Door - Key Fob Unlocks
+  trigger:
+  - entity_id: alarm_control_panel.abode_alarm_system
+    from: armed_away
+    platform: state
+    to: disarmed
+  condition: []
+  action:
+  - service: lock.unlock
+- id: '1547307718400'
+  alias: Front Door - Lock When Abode Armed
+  trigger:
+  - entity_id: alarm_control_panel.abode_alarm_system
+    for: 00:01:00
+    from: disarmed
+    platform: state
+    to: armed_away
+  condition: []
+  action:
+  - service: lock.lock
+- id: '1547308138948'
+  alias: Living Room Lights - Turn On
+  trigger:
+  - event: sunset
+    platform: sun
+  condition: []
+  action:
+  - data:
+      entity_id: switch.stitchplug1
+    service: switch.turn_on
+  - data:
+      entity_id: switch.stitchplug2
+    service: switch.turn_on
+  - data:
+      entity_id: switch.zooz_unknown_type_a000_id_a003_switch_2
+    service: switch.turn_on
+- id: '1547325493608'
+  alias: Living Room Lights - Turn Off
+  trigger:
+  - at: '23:00'
+    platform: time
+  condition:
+  - condition: state
+    entity_id: media_player.denon_receiver
+    state: 'off'
+  action:
+  - data:
+      entity_id: switch.stitchplug1
+    service: switch.turn_off
+  - data:
+      entity_id: switch.stitchplug2
+    service: switch.turn_off
+- id: '1547325986665'
+  alias: Alarm - Arm Away When Christian Leaving
+  trigger:
+  - entity_id: device_tracker.christians_iphonex
+    for: 00:02:00
+    platform: state
+    to: not_home
+  condition:
+  - condition: state
+    entity_id: device_tracker.mirandas_iphone
+    state: not_home
+  action:
+  - data:
+      entity_id: alarm_control_panel.abode_alarm_system
+    service: alarm_control_panel.alarm_arm_away
+- id: '1547436609797'
+  alias: Alarm - Arm Home When Sleeping
+  trigger:
+  - at: '22:00:00'
+    platform: time
+  condition:
+  - condition: state
+    entity_id: device_tracker.mirandas_iphone
+    state: home
+  - condition: state
+    entity_id: device_tracker.mexican_gringo_wifi
+    state: home
+  action:
+  - data:
+      entity_id: alarm_control_panel.abode_alarm_system
+    service: alarm_control_panel.alarm_arm_home
+- id: '1547846705851'
+  alias: Alarm - Arm Away When Miranda Leaving
+  trigger:
+  - entity_id: device_tracker.mirandas_iphone
+    for: 00:02:00
+    platform: state
+    to: not_home
+  condition:
+  - condition: state
+    entity_id: device_tracker.christians_iphonex
+    state: not_home
+  action:
+  - data:
+      entity_id: alarm_control_panel.abode_alarm_system
+    service: alarm_control_panel.alarm_arm_away
+- id: '1548006134100'
+  alias: Alarm - Disarm If Door Unlocked and Christian Home
+  trigger:
+  - entity_id: lock.schlage_be469_touchscreen_deadbolt_locked_6
+    from: locked
+    platform: state
+    to: unlocked
+  condition:
+  - condition: state
+    entity_id: device_tracker.cbuechele7470
+    state: home
+  - condition: state
+    entity_id: alarm_control_panel.abode_alarm_system
+    state: armed_away
+  action:
+  - data:
+      entity_id: alarm_control_panel.abode_alarm_system
+    service: alarm_control_panel.alarm_disarm
+- id: '1548468499713'
+  alias: Garage Light - On When Door is Opened
+  trigger:
+  - entity_id: binary_sensor.garage_door
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data:
+      entity_id: switch.garage_light
+    service: switch.turn_on
+- id: '1548520965851'
+  alias: Front Porch Light - Motion Sensed and Turn On
+  trigger:
+  - entity_id: sensor.zooz_unknown_type_0001_id_0005_burglar_2
+    from: '0'
+    platform: state
+    to: '8'
+  condition:
+  - after: sunset
+    condition: sun
+  action:
+  - data:
+      entity_id: switch.front_porch_light
+    service: switch.turn_on
+  - delay: 00:01:00
+  - data:
+      entity_id: switch.front_porch_light
+    service: switch.turn_off
+- id: '1549935060219'
+  alias: Front Porch Light - Turn on when door opened (sunset)
+  trigger:
+  - entity_id: binary_sensor.front_door_sensor
+    platform: state
+    to: 'on'
+  condition:
+  - after: sunset
+    condition: sun
+  action:
+  - data:
+      entity_id: switch.front_porch_light
+    service: switch.turn_on
+  - delay: 00:01:00
+  - data:
+      entity_id: switch.front_porch_light
+    service: switch.turn_off
+- id: '1549935291052'
+  alias: Front Porch Light - Turn on when door opened (sunrise)
+  trigger:
+  - entity_id: binary_sensor.front_door_sensor
+    platform: state
+    to: 'on'
+  condition:
+  - before: sunrise
+    condition: sun
+  action:
+  - data:
+      entity_id: switch.front_porch_light
+    service: switch.turn_on
+  - delay: 00:01:00
+  - data:
+      entity_id: switch.front_porch_light
+    service: switch.turn_off
+- id: '1553211015701'
+  alias: Garage Light - Off When Door is Closed
+  trigger:
+  - entity_id: binary_sensor.garage_door
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data:
+      entity_id: switch.garage_light
+    service: switch.turn_off
